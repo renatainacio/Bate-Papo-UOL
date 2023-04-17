@@ -8,8 +8,6 @@ buscarMensagens();
 idIntervalConexao = setInterval(manterConexao, 5000);
 idIntervalMensagens = setInterval(buscarMensagens, 3000);
 
-setTimeout(encerrar, 100000);
-
 function manterConexao() {
     const promiseManterConexao = axios.post('https://mock-api.driven.com.br/api/vm/uol/status', nomeEnviar); 
 }
@@ -39,18 +37,18 @@ function enviarNomeAoServidor(nome)
 
 function renderizarMensagens(resposta)
 {
-    console.log(resposta);
+    document.querySelector(".chat").innerHTML = "";
     resposta.data.forEach(mensagem => 
         {
             if (mensagem.type === "message")
                 document.querySelector(".chat").innerHTML +=
-                `<div class="msg">
+                `<div class="msg" data-test="message">
                     <p><span class="horario">(${mensagem.time})</span>
                     <strong>${mensagem.from}</strong> para <strong> ${mensagem.to}: </strong> ${mensagem.text}</p>
                 </div>`
             else if (mensagem.type === "status")
                 document.querySelector(".chat").innerHTML +=
-                `<div class="notificacao">
+                `<div class="notificacao" data-test="message">
                     <p><span class="horario">(${mensagem.time})</span>
                     <strong>${mensagem.from} </strong>${mensagem.text}</p>
                 </div>` 
@@ -61,6 +59,8 @@ function renderizarMensagens(resposta)
 function enviarMensagem()
 {
     const mensagem = document.querySelector(".inputUsuario").value;
+    document.querySelector(".inputUsuario").value = "";
+    console.log(mensagem);
     const mensagemObjeto = 
     {
         from: nomeEnviar.name,
@@ -70,7 +70,7 @@ function enviarMensagem()
     }
     const promiseEnviarMensagem = axios.post('https://mock-api.driven.com.br/api/vm/uol/messages', mensagemObjeto);
     promiseEnviarMensagem.then(buscarMensagens);
-    promiseEnviarMensagem.catch(erro => window.location.reload());
+    promiseEnviarMensagem.catch(erro=>console.log(erro));
 }
 
 function erroMensagens(erro)
