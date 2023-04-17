@@ -64,27 +64,23 @@ form {
 
 .msg, .notificacao {
     width: 100%;
-    display: flex;
+    /* display: flex;
     flex-direction: row;
     justify-content: flex-start;
+    align-items: center; */
     padding: 12px 8px;
     background:#FFFFFF;
     border-radius: 2px;
     margin: 4px 0;
 }
 
+strong {
+    font-weight: 700;
+}
+
 .horario {
     color: #AAAAAA;
-    margin-right: 8px;
-}
-
-.nome {
-    font-weight: bold;
     margin-right: 4px;
-}
-
-.para {
-    margin-right: 4px;   
 }
 
 .notificacao {
