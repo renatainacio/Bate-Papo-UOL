@@ -26,16 +26,21 @@ function enviarNomeAoServidor(nome)
     promisePostNome.then(entrarNaSala);
     promisePostNome.catch(erro => 
         {
-            if(erro.response.status === 400)
-            nome = prompt("O nome informado já está em uso, tente outro nome");
-            enviarNomeAoServidor(nome);
+            if (erro.response.status === 400)
+            {
+                nome = prompt("O nome informado já está em uso, tente outro nome");
+                enviarNomeAoServidor(nome);
+            }
         });    
 }
 
 function renderizarMensagens(resposta)
 {
+    const mensagensExibir = resposta.data.filter(mensagem => {
+        if (mensagem.to="Todos" || mensagem.to === nomeEnviar.nome || mensagem.from === nomeEnviar.nome)
+    })
     document.querySelector(".chat").innerHTML = "";
-    resposta.data.forEach(mensagem => 
+    mensagensExibir.forEach(mensagem => 
         {
             if (mensagem.type === "message")
                 document.querySelector(".chat").innerHTML +=
@@ -66,7 +71,11 @@ function enviarMensagem()
     }
     const promiseEnviarMensagem = axios.post('https://mock-api.driven.com.br/api/vm/uol/messages', mensagemObjeto);
     promiseEnviarMensagem.then(buscarMensagens);
-    promiseEnviarMensagem.catch(erro=>console.log(erro));
+    promiseEnviarMensagem.catch(erro=>
+        {
+            console.log(erro);
+            window.location.reload();
+        });
 }
 
 document.querySelector(".inputUsuario").onkeydown = function(e){
