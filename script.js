@@ -5,20 +5,6 @@ let nome = prompt("Informe o seu nome");
 let nomeEnviar;
 enviarNomeAoServidor(nome);
 
-function manterConexao() {
-    const promiseManterConexao = axios.post('https://mock-api.driven.com.br/api/vm/uol/status', nomeEnviar); 
-}
-
-function encerrar() {
-    clearInterval(idIntervalConexao);
-}
-
-function buscarMensagens() {
-    const promiseGetMensagens = axios.get('https://mock-api.driven.com.br/api/vm/uol/messages');
-    promiseGetMensagens.then(renderizarMensagens);
-    promiseGetMensagens.catch(erroMensagens);
-}
-
 function enviarNomeAoServidor(nome)
 {
     nomeEnviar = { name:nome };
@@ -34,11 +20,24 @@ function enviarNomeAoServidor(nome)
         });    
 }
 
+function entrarNaSala()
+{
+    buscarMensagens();
+    idIntervalConexao = setInterval(manterConexao, 5000);
+    idIntervalMensagens = setInterval(buscarMensagens, 3000);
+    document.querySelector(".inputUsuario").addEventListener("keydown", handleKeydown);
+}
+
+function buscarMensagens() {
+    const promiseGetMensagens = axios.get('https://mock-api.driven.com.br/api/vm/uol/messages');
+    promiseGetMensagens.then(renderizarMensagens);
+    promiseGetMensagens.catch(erroMensagens);
+}
+
 function renderizarMensagens(resposta)
 {
-    const mensagensExibir = resposta.data.filter(mensagem => {
-        if (mensagem.to="Todos" || mensagem.to === nomeEnviar.nome || mensagem.from === nomeEnviar.nome)
-    })
+    const mensagensExibir = resposta.data.filter(mensagem =>
+        (mensagem.to === "Todos" || mensagem.to === nomeEnviar.nome || mensagem.from === nomeEnviar.nome));
     document.querySelector(".chat").innerHTML = "";
     mensagensExibir.forEach(mensagem => 
         {
@@ -55,6 +54,14 @@ function renderizarMensagens(resposta)
                     <strong>${mensagem.from} </strong>${mensagem.text}</p>
                 </div>` 
         });
+}
+
+function manterConexao() {
+    const promiseManterConexao = axios.post('https://mock-api.driven.com.br/api/vm/uol/status', nomeEnviar); 
+}
+
+function encerrar() {
+    clearInterval(idIntervalConexao);
 }
 
 function enviarMensagem()
@@ -93,12 +100,4 @@ function erroMensagens(erro)
 function handleKeydown(event) {
     if (event.keyCode == 13)
         enviarMensagem();
-}
-
-function entrarNaSala()
-{
-    buscarMensagens();
-    idIntervalConexao = setInterval(manterConexao, 5000);
-    idIntervalMensagens = setInterval(buscarMensagens, 3000);
-    document.querySelector(".inputUsuario").addEventListener("keydown", handleKeydown);
 }
