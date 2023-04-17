@@ -31,7 +31,16 @@
         <div class="escolha">
             <p class="escolha-texto">Escolha um contato para enviar mensagem:</p>
             <div class="lista-contatos">
-                <ul class="lista-participantes">               
+                <ul class="lista-participantes">
+                    <li>
+                        <div class="item-lista-participantes selecionado" onclick="escolherContato(this)" data-test="all">
+                            <div class="item-participantes">
+                                <ion-icon name="people" class="people"></ion-icon>    
+                                <p class="nome">Todos</p>
+                            </div>
+                            <ion-icon name="checkmark" data-test="check"></ion-icon>
+                        </div>
+                    </li>              
                 </ul>
             </div>
         </div>
@@ -64,7 +73,7 @@
             <input placeholder="Escreva aqui..." class="inputUsuario" data-test="input-message">
             <ion-icon name="paper-plane-outline" class="enviar" onclick="enviarMensagem()" data-test="send-message"></ion-icon>
         </form>
-        <p class="contato-visibilidade"></p>
+        <p class="contato-visibilidade"><span class="para-quem"></span><span class="privacidade"></span></p>
     </div>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>

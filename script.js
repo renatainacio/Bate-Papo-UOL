@@ -129,9 +129,9 @@ function escolherContato(item) {
     item.classList.add("selecionado");
     const nomeSelecionado = document.querySelector(".lista-participantes").querySelector(".selecionado").querySelector(".nome").innerHTML;
     if(nomeSelecionado != "Todos")
-        document.querySelector(".contato-visibilidade").innerHTML = `Enviando para ${nomeSelecionado}`;
+        document.querySelector(".para-quem").innerHTML = `Enviando para ${nomeSelecionado}`;
     else
-        document.querySelector(".contato-visibilidade").innerHTML = "";
+        document.querySelector(".para-quem").innerHTML = "";
     }
 
 function escolherVisibilidade(item) {
@@ -139,25 +139,46 @@ function escolherVisibilidade(item) {
     item.classList.add("selecionado");
     const visibilidade = document.querySelector(".visibilidade").querySelector(".selecionado").querySelector("p").innerHTML;
     if (visibilidade != "Público")
-        document.querySelector(".contato-visibilidade").innerHTML += ` (reservadamente)`;
+        document.querySelector(".privacidade").innerHTML += ` (reservadamente)`;
+    else
+        document.querySelector(".privacidade").innerHTML += "";
 }
 
 function atualizarParticipantes(resposta) {
-    const selecionadoAnteriormente = document.querySelector(".lista-participantes").querySelector(".selecionado").querySelector(".nome").innerHTML;
+    const selecionadoAnteriormente = document.querySelector(".lista-participantes").querySelector(".selecionado").querySelector(".nome");
+    let nomeSelecionado = "";
+    if (selecionadoAnteriormente)
+        nomeSelecionado = selecionadoAnteriormente.innerHTML;
     const participantes = resposta.data;
     console.log(participantes);
-    document.querySelector(".lista-participantes").innerHTML =
-    `<li>
-        <div class="item-lista-participantes selecionado" onclick="escolherContato(this)" data-test="all">
-            <div class="item-participantes">
-                <ion-icon name="people" class="people"></ion-icon>    
-                <p class="nome">Todos</p>
+    if (nomeSelecionado === "Todos" || nomeSelecionado === "")
+    {
+        document.querySelector(".lista-participantes").innerHTML =
+        `<li>
+            <div class="item-lista-participantes selecionado" onclick="escolherContato(this)" data-test="all">
+                <div class="item-participantes">
+                    <ion-icon name="people" class="people"></ion-icon>    
+                    <p class="nome">Todos</p>
+                </div>
+                <ion-icon name="checkmark" data-test="check"></ion-icon>
             </div>
-            <ion-icon name="checkmark" data-test="check"></ion-icon>
-        </div>
-    </li>`
+        </li>`
+    }
+    else
+    {
+        document.querySelector(".lista-participantes").innerHTML =
+        `<li>
+            <div class="item-lista-participantes" onclick="escolherContato(this)" data-test="all">
+                <div class="item-participantes">
+                    <ion-icon name="people" class="people"></ion-icon>    
+                    <p class="nome">Todos</p>
+                </div>
+                <ion-icon name="checkmark" data-test="check"></ion-icon>
+            </div>
+        </li>`       
+    }
     participantes.forEach(participante => {
-        if(participante.name === selecionadoAnteriormente)
+        if(participante.name === nomeSelecionado)
         {
             document.querySelector(".lista-participantes").innerHTML +=
                 `<li>
