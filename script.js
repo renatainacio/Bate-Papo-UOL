@@ -4,9 +4,6 @@ let nome = prompt("Informe o seu nome");
 
 let nomeEnviar;
 enviarNomeAoServidor(nome);
-buscarMensagens();
-idIntervalConexao = setInterval(manterConexao, 5000);
-idIntervalMensagens = setInterval(buscarMensagens, 3000);
 
 function manterConexao() {
     const promiseManterConexao = axios.post('https://mock-api.driven.com.br/api/vm/uol/status', nomeEnviar); 
@@ -26,7 +23,7 @@ function enviarNomeAoServidor(nome)
 {
     nomeEnviar = { name:nome };
     const promisePostNome = axios.post('https://mock-api.driven.com.br/api/vm/uol/participants', nomeEnviar);
-    promisePostNome.then(resposta => console.log(resposta));
+    promisePostNome.then(entrarNaSala);
     promisePostNome.catch(erro => 
         {
             if(erro.response.status === 400)
@@ -52,7 +49,6 @@ function renderizarMensagens(resposta)
                     <p><span class="horario">(${mensagem.time})</span>
                     <strong>${mensagem.from} </strong>${mensagem.text}</p>
                 </div>` 
-            console.log(mensagem)
         });
 }
 
@@ -73,8 +69,27 @@ function enviarMensagem()
     promiseEnviarMensagem.catch(erro=>console.log(erro));
 }
 
+document.querySelector(".inputUsuario").onkeydown = function(e){
+    if(e.KeyboardEvent.keyCode == 13){
+      enviarMensagem();
+    }
+ };
+
 function erroMensagens(erro)
 {
     console.log("Algo deu errado");
     console.log(erro);
+}
+
+function handleKeydown(event) {
+    if (event.keyCode == 13)
+        enviarMensagem();
+}
+
+function entrarNaSala()
+{
+    buscarMensagens();
+    idIntervalConexao = setInterval(manterConexao, 5000);
+    idIntervalMensagens = setInterval(buscarMensagens, 3000);
+    document.querySelector(".inputUsuario").addEventListener("keydown", handleKeydown);
 }
