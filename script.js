@@ -1,38 +1,28 @@
 axios.defaults.headers.common['Authorization'] = 'BtXNJoiFoeQE4oiiOTK7wiYj';
 
-let nome = prompt("Informe o seu nome");
+let nome;
 let nomeObj;
-
-enviarNomeAoServidor(nome);
 
 function enviarNomeAoServidor()
 {
+    nome = document.querySelector(".input-nome").value;
     nomeObj = { name : nome };
+    console.log(nomeObj);
     const promisePostNome = axios.post('https://mock-api.driven.com.br/api/vm/uol/participants', nomeObj);
     promisePostNome.then(entrarNaSala);
-    promisePostNome.catch(nomeInvalido);    
+    promisePostNome.catch(reload);
 }
 
 function entrarNaSala()
 {
+    document.querySelector(".tela-login").classList.add("escondido");
+    document.querySelector(".header").classList.remove("escondido");
+    document.querySelector(".chat").classList.remove("escondido");
+    document.querySelector(".footer").classList.remove("escondido");
     buscarMensagens();
     idIntervalConexao = setInterval(manterConexao, 5000);
     idIntervalMensagens = setInterval(buscarMensagens, 3000);
     document.querySelector(".inputUsuario").addEventListener("keydown", handleKeydown);
-    // document.querySelector(".inputUsuario").onkeydown = function(e){
-    //     if(e.KeyboardEvent.keyCode == 13){
-    //       enviarMensagem();
-    //     }
-    //  };
-}
-
-function nomeInvalido(erro)
-{
-    if (erro.response.status === 400)
-    {
-        nome = prompt("O nome informado já está em uso, tente outro nome");
-        enviarNomeAoServidor(nome);
-    }
 }
 
 function buscarMensagens() {
@@ -87,20 +77,21 @@ function enviarMensagem()
     }
     const promiseEnviarMensagem = axios.post('https://mock-api.driven.com.br/api/vm/uol/messages', mensagemObjeto);
     promiseEnviarMensagem.then(buscarMensagens);
-    promiseEnviarMensagem.catch(erro=>
-        {
-            console.log(erro);
-            window.location.reload();
-        });
+    promiseEnviarMensagem.catch(reload);
 }
 
 function erroMensagens(erro)
 {
     console.log("Algo deu errado");
     console.log(erro);
+    window.location.reload();
 }
 
 function handleKeydown(event) {
     if (event.keyCode == 13)
         enviarMensagem();
+}
+
+function reload(erro) {
+    window.location.reload();
 }
