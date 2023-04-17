@@ -148,12 +148,12 @@ function atualizarParticipantes(resposta) {
     console.log(participantes);
     document.querySelector(".lista-participantes").innerHTML =
     `<li>
-        <div class="item-lista-participantes selecionado" onclick="escolherContato(this)">
+        <div class="item-lista-participantes selecionado" onclick="escolherContato(this)" data-test="all">
             <div class="item-participantes">
                 <ion-icon name="people" class="people"></ion-icon>    
                 <p class="nome">Todos</p>
             </div>
-            <ion-icon name="checkmark"></ion-icon>
+            <ion-icon name="checkmark" data-test="check"></ion-icon>
         </div>
     </li>`
     participantes.forEach(participante => {
@@ -161,12 +161,12 @@ function atualizarParticipantes(resposta) {
         {
             document.querySelector(".lista-participantes").innerHTML +=
                 `<li>
-                    <div class="item-lista-participantes selecionado" onclick="escolherContato(this)">
+                    <div class="item-lista-participantes selecionado" onclick="escolherContato(this)" data-test="participant">
                         <div class="item-participantes">
                             <ion-icon name="people" class="people"></ion-icon>    
                             <p class="nome">${participante.name}</p>
                         </div>
-                        <ion-icon name="checkmark"></ion-icon>
+                        <ion-icon name="checkmark" data-test="check"></ion-icon>
                     </div>
                 </li>`        
         }
@@ -174,12 +174,12 @@ function atualizarParticipantes(resposta) {
         {
             document.querySelector(".lista-participantes").innerHTML +=
                 `<li>
-                    <div class="item-lista-participantes" onclick="escolherContato(this)">
+                    <div class="item-lista-participantes" onclick="escolherContato(this)" data-test="participant">
                         <div class="item-participantes">
                             <ion-icon name="people" class="people"></ion-icon>    
                             <p class="nome">${participante.name}</p>
                         </div>
-                        <ion-icon name="checkmark"></ion-icon>
+                        <ion-icon name="checkmark" data-test="check"></ion-icon>
                     </div>
                 </li>`        
         }

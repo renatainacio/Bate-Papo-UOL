@@ -25,22 +25,13 @@
     </div>
     <div class="chat escondido">
     </div>
-    <div class="menu-lateral" onclick="esconderMenuLateral()">
+    <div class="menu-lateral" onclick="esconderMenuLateral()" data-test="overlay">
     </div>
     <div class="barra-lateral">
         <div class="escolha">
             <p class="escolha-texto">Escolha um contato para enviar mensagem:</p>
             <div class="lista-contatos">
-                <ul class="lista-participantes">
-                    <li>
-                        <div class="item-lista-participantes selecionado" onclick="escolherContato(this)">
-                            <div class="item-participantes">
-                                <ion-icon name="people" class="people"></ion-icon>    
-                                <p class="nome">Todos</p>
-                            </div>
-                            <ion-icon name="checkmark"></ion-icon>
-                        </div>
-                    </li>                  
+                <ul class="lista-participantes">               
                 </ul>
             </div>
         </div>
@@ -48,21 +39,21 @@
             <p class="visibilidade-texto">Escolha a visibilidade:</p>
             <ul>
                 <li>
-                    <div class="item-visibilidade-check selecionado" onclick="escolherVisibilidade(this)">
+                    <div class="item-visibilidade-check selecionado" onclick="escolherVisibilidade(this)" data-test="public">
                         <div class="item-visibilidade">
                             <ion-icon name="lock-closed"></ion-icon>    
                             <p>Público</p>
                         </div>
-                        <ion-icon name="checkmark"></ion-icon>
+                        <ion-icon name="checkmark" data-test="check"></ion-icon>
                     </div>
                 </li>
                 <li>
-                    <div class="item-visibilidade-check" onclick="escolherVisibilidade(this)">
+                    <div class="item-visibilidade-check" onclick="escolherVisibilidade(this)" data-test="private">
                         <div class="item-visibilidade">
                             <ion-icon name="lock-closed"></ion-icon>   
                             <p>Reservadamente</p>
                         </div>
-                        <ion-icon name="checkmark-outline"></ion-icon>
+                        <ion-icon name="checkmark-outline" data-test="check"></ion-icon>
                     </div>
                 </li>
             </ul>
