@@ -1,12 +1,12 @@
 axios.defaults.headers.common['Authorization'] = 'BtXNJoiFoeQE4oiiOTK7wiYj';
 
-const nome = prompt("Informe o seu nome");
-const nomeEnviar = { name:nome };
-const promisePostNome = axios.post('https://mock-api.driven.com.br/api/vm/uol/participants', nomeEnviar);
-promisePostNome.then(resposta => console.log(resposta));
-promisePostNome.catch(erro => console.log(erro));
-idInterval = setInterval(manterConexao, 5000);
+let nome = prompt("Informe o seu nome");
+
+let nomeEnviar;
+enviarNomeAoServidor(nome);
 buscarMensagens();
+idIntervalConexao = setInterval(manterConexao, 5000);
+idIntervalMensagens = setInterval(buscarMensagens, 3000);
 
 setTimeout(encerrar, 100000);
 
@@ -15,7 +15,7 @@ function manterConexao() {
 }
 
 function encerrar() {
-    clearInterval(idInterval);
+    clearInterval(idIntervalConexao);
 }
 
 function buscarMensagens() {
@@ -24,8 +24,22 @@ function buscarMensagens() {
     promiseGetMensagens.catch(erroMensagens);
 }
 
+function enviarNomeAoServidor(nome)
+{
+    nomeEnviar = { name:nome };
+    const promisePostNome = axios.post('https://mock-api.driven.com.br/api/vm/uol/participants', nomeEnviar);
+    promisePostNome.then(resposta => console.log(resposta));
+    promisePostNome.catch(erro => 
+        {
+            if(erro.response.status === 400)
+            nome = prompt("O nome informado já está em uso, tente outro nome");
+            enviarNomeAoServidor(nome);
+        });    
+}
+
 function renderizarMensagens(resposta)
 {
+    console.log(resposta);
     resposta.data.forEach(mensagem => 
         {
             if (mensagem.type === "message")
@@ -42,6 +56,21 @@ function renderizarMensagens(resposta)
                 </div>` 
             console.log(mensagem)
         });
+}
+
+function enviarMensagem()
+{
+    const mensagem = document.querySelector(".inputUsuario").value;
+    const mensagemObjeto = 
+    {
+        from: nomeEnviar.name,
+        to:"Todos",
+        text: mensagem,
+        type: "message"
+    }
+    const promiseEnviarMensagem = axios.post('https://mock-api.driven.com.br/api/vm/uol/messages', mensagemObjeto);
+    promiseEnviarMensagem.then(buscarMensagens);
+    promiseEnviarMensagem.catch(erro => window.location.reload());
 }
 
 function erroMensagens(erro)
