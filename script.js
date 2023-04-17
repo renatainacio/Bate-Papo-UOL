@@ -44,15 +44,21 @@ function buscarMensagens() {
 function renderizarMensagens(resposta)
 {
     const mensagensExibir = resposta.data.filter(mensagem =>
-        (mensagem.to === "Todos" || mensagem.to === nomeEnviar.nome || mensagem.from === nomeEnviar.nome));
+        (mensagem.to === "Todos" || mensagem.to === nomeObj.nome || mensagem.from === nomeObj.nome));
     document.querySelector(".chat").innerHTML = "";
     mensagensExibir.forEach(mensagem => 
         {
-            if (mensagem.type === "message")
+            if (mensagem.type === "message" && mensagem.to === "Todos")
                 document.querySelector(".chat").innerHTML +=
                 `<div class="msg" data-test="message">
                     <p><span class="horario">(${mensagem.time})</span>
                     <strong>${mensagem.from}</strong> para <strong> ${mensagem.to}: </strong> ${mensagem.text}</p>
+                </div>`
+            else if (mensagem.type === "message")
+                document.querySelector(".chat").innerHTML +=
+                `<div class="reservada" data-test="message">
+                    <p><span class="horario">(${mensagem.time})</span>
+                    <strong>${mensagem.from}</strong> reservadamente para <strong> ${mensagem.to}: </strong> ${mensagem.text}</p>
                 </div>`
             else if (mensagem.type === "status")
                 document.querySelector(".chat").innerHTML +=
@@ -64,7 +70,7 @@ function renderizarMensagens(resposta)
 }
 
 function manterConexao() {
-    const promiseManterConexao = axios.post('https://mock-api.driven.com.br/api/vm/uol/status', nomeEnviar); 
+    const promiseManterConexao = axios.post('https://mock-api.driven.com.br/api/vm/uol/status', nomeObj); 
 }
 
 function enviarMensagem()
@@ -74,7 +80,7 @@ function enviarMensagem()
     console.log(mensagem);
     const mensagemObjeto = 
     {
-        from: nomeEnviar.name,
+        from: nomeObj.name,
         to:"Todos",
         text: mensagem,
         type: "message"
