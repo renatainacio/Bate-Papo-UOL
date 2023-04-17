@@ -1,23 +1,16 @@
 axios.defaults.headers.common['Authorization'] = 'BtXNJoiFoeQE4oiiOTK7wiYj';
 
 let nome = prompt("Informe o seu nome");
+let nomeObj;
 
-let nomeEnviar;
 enviarNomeAoServidor(nome);
 
-function enviarNomeAoServidor(nome)
+function enviarNomeAoServidor()
 {
-    nomeEnviar = { name:nome };
-    const promisePostNome = axios.post('https://mock-api.driven.com.br/api/vm/uol/participants', nomeEnviar);
+    nomeObj = { name : nome };
+    const promisePostNome = axios.post('https://mock-api.driven.com.br/api/vm/uol/participants', nomeObj);
     promisePostNome.then(entrarNaSala);
-    promisePostNome.catch(erro => 
-        {
-            if (erro.response.status === 400)
-            {
-                nome = prompt("O nome informado já está em uso, tente outro nome");
-                enviarNomeAoServidor(nome);
-            }
-        });    
+    promisePostNome.catch(nomeInvalido);    
 }
 
 function entrarNaSala()
@@ -26,6 +19,20 @@ function entrarNaSala()
     idIntervalConexao = setInterval(manterConexao, 5000);
     idIntervalMensagens = setInterval(buscarMensagens, 3000);
     document.querySelector(".inputUsuario").addEventListener("keydown", handleKeydown);
+    // document.querySelector(".inputUsuario").onkeydown = function(e){
+    //     if(e.KeyboardEvent.keyCode == 13){
+    //       enviarMensagem();
+    //     }
+    //  };
+}
+
+function nomeInvalido(erro)
+{
+    if (erro.response.status === 400)
+    {
+        nome = prompt("O nome informado já está em uso, tente outro nome");
+        enviarNomeAoServidor(nome);
+    }
 }
 
 function buscarMensagens() {
@@ -60,10 +67,6 @@ function manterConexao() {
     const promiseManterConexao = axios.post('https://mock-api.driven.com.br/api/vm/uol/status', nomeEnviar); 
 }
 
-function encerrar() {
-    clearInterval(idIntervalConexao);
-}
-
 function enviarMensagem()
 {
     const mensagem = document.querySelector(".inputUsuario").value;
@@ -84,12 +87,6 @@ function enviarMensagem()
             window.location.reload();
         });
 }
-
-document.querySelector(".inputUsuario").onkeydown = function(e){
-    if(e.KeyboardEvent.keyCode == 13){
-      enviarMensagem();
-    }
- };
 
 function erroMensagens(erro)
 {
