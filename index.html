@@ -14,7 +14,7 @@
 <body>
     <div class="header escondido">
         <img src="img/logo.png" class="logo"/>
-        <ion-icon name="people" class="people"></ion-icon>
+        <ion-icon name="people" class="people" onclick="mostrarListaParticipantes()"></ion-icon>
     </div>
     <div class="tela-login">
         <img src="img/logo.png" class="logo"/>
@@ -25,11 +25,55 @@
     </div>
     <div class="chat escondido">
     </div>
+    <div class="menu-lateral" onclick="esconderMenuLateral()">
+    </div>
+    <div class="barra-lateral">
+        <div class="escolha">
+            <p class="escolha-texto">Escolha um contato para enviar mensagem:</p>
+            <div class="lista-contatos">
+                <ul class="lista-participantes">
+                    <li>
+                        <div class="item-lista-participantes selecionado" onclick="escolherContato(this)">
+                            <div class="item-participantes">
+                                <ion-icon name="people" class="people"></ion-icon>    
+                                <p class="nome">Todos</p>
+                            </div>
+                            <ion-icon name="checkmark"></ion-icon>
+                        </div>
+                    </li>                  
+                </ul>
+            </div>
+        </div>
+        <div class="visibilidade">
+            <p class="visibilidade-texto">Escolha a visibilidade:</p>
+            <ul>
+                <li>
+                    <div class="item-visibilidade-check selecionado" onclick="escolherVisibilidade(this)">
+                        <div class="item-visibilidade">
+                            <ion-icon name="lock-closed"></ion-icon>    
+                            <p>Público</p>
+                        </div>
+                        <ion-icon name="checkmark"></ion-icon>
+                    </div>
+                </li>
+                <li>
+                    <div class="item-visibilidade-check" onclick="escolherVisibilidade(this)">
+                        <div class="item-visibilidade">
+                            <ion-icon name="lock-closed"></ion-icon>   
+                            <p>Reservadamente</p>
+                        </div>
+                        <ion-icon name="checkmark-outline"></ion-icon>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
     <div class="footer escondido">
         <form>
             <input placeholder="Escreva aqui..." class="inputUsuario" data-test="input-message">
             <ion-icon name="paper-plane-outline" class="enviar" onclick="enviarMensagem()" data-test="send-message"></ion-icon>
         </form>
+        <p class="contato-visibilidade"></p>
     </div>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
