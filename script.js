@@ -15,11 +15,11 @@ function enviarNomeAoServidor()
 
 function entrarNaSala()
 {
+    buscarMensagens();
     document.querySelector(".tela-login").classList.add("escondido");
     document.querySelector(".header").classList.remove("escondido");
     document.querySelector(".chat").classList.remove("escondido");
     document.querySelector(".footer").classList.remove("escondido");
-    buscarMensagens();
     listaDeParticipantes();
     idIntervalConexao = setInterval(manterConexao, 5000);
     idIntervalMensagens = setInterval(buscarMensagens, 3000);
@@ -35,27 +35,34 @@ function buscarMensagens() {
 
 function renderizarMensagens(resposta)
 {
+    console.log(resposta.data);
+    let ultima = "";
     const mensagensExibir = resposta.data.filter(mensagem =>
-        (mensagem.type === "message" || mensagem.to === nomeObj.name || mensagem.from === nomeObj.name));
+        (mensagem.type === "message" || mensagem.to === "Todos" || mensagem.to === nomeObj.name || mensagem.from === nomeObj.name));
     document.querySelector(".chat").innerHTML = "";
-    mensagensExibir.forEach(mensagem => 
-        {
-            if (mensagem.type === "message")
-                document.querySelector(".chat").innerHTML +=
-                `<div class="msg" data-test="message">
-                    <p><span class="horario">(${mensagem.time})</span><strong>${mensagem.from}</strong> para <strong> ${mensagem.to}: </strong> ${mensagem.text}</p>
-                </div>`
-            else if (mensagem.type === "private_message")
-                document.querySelector(".chat").innerHTML +=
-                `<div class="reservada" data-test="message">
-                    <p><span class="horario">(${mensagem.time})</span><strong>${mensagem.from}</strong> reservadamente para <strong> ${mensagem.to}: </strong> ${mensagem.text}</p>
-                </div>`
-            else if (mensagem.type === "status")
-                document.querySelector(".chat").innerHTML +=
-                `<div class="notificacao" data-test="message">
-                    <p><span class="horario">(${mensagem.time})</span><strong>${mensagem.from} </strong>${mensagem.text}</p>
-                </div>` 
-        });
+    mensagensExibir.forEach(function (mensagem, index) {
+        if(index === (mensagensExibir.length - 1))
+            ultima = "ultima";
+        if (mensagem.type === "message")
+            document.querySelector(".chat").innerHTML +=
+            `<div class="msg ${ultima}" data-test="message">
+                <p><span class="horario">(${mensagem.time})</span><strong>${mensagem.from}</strong> para <strong> ${mensagem.to}: </strong> ${mensagem.text}</p>
+            </div>`;
+        else if (mensagem.type === "private_message")
+            document.querySelector(".chat").innerHTML +=
+            `<div class="reservada ${ultima}" data-test="message">
+                <p><span class="horario">(${mensagem.time})</span><strong>${mensagem.from}</strong> reservadamente para <strong> ${mensagem.to}: </strong> ${mensagem.text}</p>
+            </div>`;
+        else if (mensagem.type === "status")
+            document.querySelector(".chat").innerHTML +=
+            `<div class="notificacao ${ultima}" data-test="message">
+                <p><span class="horario">(${mensagem.time})</span><strong>${mensagem.from} </strong>${mensagem.text}</p>
+            </div>`; 
+    } 
+        );
+    const exibirUltima = document.querySelector('.ultima');
+    exibirUltima.scrollIntoView();
+    
 }
 
 function erroNome() {
@@ -145,12 +152,11 @@ function escolherVisibilidade(item) {
 }
 
 function atualizarParticipantes(resposta) {
-    const selecionadoAnteriormente = document.querySelector(".lista-participantes").querySelector(".selecionado").querySelector(".nome");
+    const selecionadoAnteriormente = document.querySelector(".lista-participantes").querySelector(".selecionado");
     let nomeSelecionado = "";
     if (selecionadoAnteriormente)
-        nomeSelecionado = selecionadoAnteriormente.innerHTML;
+        nomeSelecionado = selecionadoAnteriormente.querySelector(".nome").innerHTML;
     const participantes = resposta.data;
-    console.log(participantes);
     if (nomeSelecionado === "Todos" || nomeSelecionado === "")
     {
         document.querySelector(".lista-participantes").innerHTML =
